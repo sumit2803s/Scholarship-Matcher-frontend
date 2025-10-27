@@ -1,4 +1,6 @@
-const BASE_URL = "http://localhost:8080/api/scholarships"; // Spring Boot URL
+const API_BASE = "https://scholarship-matcher-backend-production.up.railway.app/";
+
+
 
 export const matchScholarships = async (profile) => {
     try {
