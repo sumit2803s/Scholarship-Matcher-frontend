@@ -4,7 +4,7 @@ const API_BASE = "https://scholarship-matcher-backend-production.up.railway.app/
 
 export const matchScholarships = async (profile) => {
     try {
-        const res = await fetch(`${BASE_URL}/match`, {
+        const res = await fetch(`${API_BASE}/match`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(profile),
