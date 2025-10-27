@@ -17,13 +17,28 @@ function App() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch("https://scholarship-matcher-backend-production.up.railway.app/api/match", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(profile),
-        });
-        const data = await response.json();
-        setResults(data.results || []);
+        try {
+            const response = await fetch(
+                "https://scholarship-matcher-backend-production.up.railway.app/api/match",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(profile),
+                }
+            );
+
+            if (!response.ok) {
+                console.error("❌ Backend error:", response.status, response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+
+            // ✅ Backend returns an array, not { results: [...] }
+            setResults(Array.isArray(data) ? data : data.results || []);
+        } catch (error) {
+            console.error("❌ Network error:", error);
+        }
     };
 
     return (
@@ -94,9 +109,11 @@ function App() {
                                 <p><strong>Provider:</strong> {s.provider}</p>
                                 <p><strong>Country:</strong> {s.country}</p>
                                 <p><strong>Deadline:</strong> {s.deadline}</p>
-                                <a href={s.applyUrl} target="_blank" rel="noopener noreferrer">
-                                    Apply Here
-                                </a>
+                                {s.applyUrl && (
+                                    <a href={s.applyUrl} target="_blank" rel="noopener noreferrer">
+                                        Apply Here
+                                    </a>
+                                )}
                             </div>
                         ))}
                     </div>
